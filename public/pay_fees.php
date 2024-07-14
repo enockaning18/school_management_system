@@ -2,50 +2,14 @@
 
 include "../private/initialize.php";
 include(SHARED_PATH . "/navbar.php");
-require_once("scripts.php");
+include "../private/scripts.php";
 
-// Enable error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
-// Ensure database connection is established
-if (!isset($database_connection)) {
-    die("Database connection not set.");
-}
 
-// Get the data from the AJAX request
-$input = file_get_contents('php://input');
-$data = json_decode($input, true);
 
-// Check if JSON decoding was successful
-if (json_last_error() !== JSON_ERROR_NONE) {
-    echo "Failed to decode JSON. Error: " . json_last_error_msg();
-    error_log("Raw input data: " . $input); // Log raw input data for debugging
-    exit;
-}
 
-// Debugging: Check what data is received
-error_log("Received data: " . print_r($data, true));
 
-// Check if the required fields are present in the decoded data
-$required_fields = ['payment_id', 'student_id', 'fee_id', 'amount_payed', 'payment_method', 'payment_date'];
-foreach ($required_fields as $field) {
-    if (!isset($data[$field])) {
-        echo "Missing required field: $field";
-        exit;
-    }
-}
-
-$payment_id = $data['payment_id'];
-$student_id = $data['student_id'];
-$fee_id = $data['fee_id'];
-$amount_payed = $data['amount_payed'];
-$payment_method = $data['payment_method'];
-$payment_date = $data['payment_date'];
-
-$query = "INSERT INTO payments (payment_id, student_id, fee_id, amount_payed, payment_method, payment_date)";
-
+// Handle assignment of fees if the form is submitted
 if (isset($_POST['assign_amount'])) {
     // Sanitize input
     $fee_id = str_pad(rand(0, 9999999), 7, '0', STR_PAD_LEFT);
@@ -140,6 +104,7 @@ if (isset($_POST['assign_amount'])) {
                                                 </select>
                                             </div>
                                             <div class="mb-3 col-md-6">
+                                                <input type="hidden">
                                                 <label class="form-label" for="country">Payment For</label>
                                                 <select id="payment" name="payment" class="select2 form-select">
                                                     <option value="">Select</option>
@@ -244,3 +209,5 @@ mysqli_close($database_connection); ?>
 </script>
 
 <?php
+
+?>

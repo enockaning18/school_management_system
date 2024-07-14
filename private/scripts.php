@@ -25,7 +25,7 @@
 
         // Send data to server using AJAX
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "pay_fees.php", true);
+        xhr.open("POST", "../public/pay_fees.php", true);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.onreadystatechange = function() {
           if (xhr.readyState === 4 && xhr.status === 200) {
