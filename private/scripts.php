@@ -4,7 +4,7 @@
 <script type="text/javascript">
   function payWithPaystack() {
     var handler = PaystackPop.setup({
-      key: 'pk_test_edd00935ae2ac1c00884bf695e188e7084d8b93c', // Replace with your Paystack public key
+      key: 'pk_live_1331391d9362adc096ed00e574cd590fcc024896', // Replace with your Paystack public key
       email: document.getElementById('email_address').value,
       amount: document.getElementById('amount_payed').value * 100, // Amount in kobo
       currency: "GHS",

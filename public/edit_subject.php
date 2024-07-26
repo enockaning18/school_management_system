@@ -55,7 +55,7 @@ $subject_id = $_GET['subject_id'] ?? 'User not found'; // PHP > 7.0
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="country">Teacher</label>
                                                 <select id="teacher" name="teacher_id" class="select2 form-select">
-                                                    <option value="">Select</option>                                                    
+                                                    <option value="">Select</option>
                                                     <?php while ($fetched_subject_teacher = mysqli_fetch_assoc($teacher_subject_result)) { ?>
                                                         <option value="<?php echo $fetched_subject_teacher['teachers_id'] ?>"> <?php echo $fetched_subject_teacher['first_name'] . ' ' . $fetched_subject_teacher['last_name'] ?></option>
                                                     <?php } ?>
@@ -88,7 +88,7 @@ $subject_id = $_GET['subject_id'] ?? 'User not found'; // PHP > 7.0
                                             </div>
 
                                         </div>
-                                        
+
                                     </div>
                                     <div class="mt-2">
                                         <button type="submit" name="update_student" class="btn btn-primary me-2"> Save Changes </button>
@@ -141,6 +141,19 @@ $subject_id = $_GET['subject_id'] ?? 'User not found'; // PHP > 7.0
                 } else {
                     echo "Error " . mysqli_stmt_error($statement);
                 }
+            } else {
+                echo '                
+                <div class="position-absolute top-50 start-50 translate-right bs-toast toast fade show bg-danger  top-0 end-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                    <i class="bx bx-bell me-2"></i>
+                    <div class="me-auto fw-medium">Notification</div>
+                    <small>0 mins ago</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                    Select Confirm before account can be deactivated.
+                    </div>
+                </div>';
             }
         }
 

@@ -1,6 +1,15 @@
- <?php require_once("../private/initialize.php");
+ <?php
+  ob_start();
+  require_once("../private/initialize.php");
   $query_command = "SELECT * FROM class ";
   $class_result = mysqli_query($database_connection, $query_command);
+
+  if (!empty($_SESSION["admin_id"])) {
+    $admin_id = $_SESSION["admin_id"];
+    $query_command = "SELECT * FROM admin WHERE admin_id = $admin_id";
+    $result = mysqli_query($database_connection, $query_command);
+    $fetch_admin = mysqli_fetch_assoc($result);
+  }
   ?>
 
  <!DOCTYPE html>
@@ -65,9 +74,9 @@
          <ul class="menu-inner py-1 ">
            <!-- Dashboards -->
            <li class="menu-item">
-             <a href="javascript:void(0);" class="menu-link ">
+             <a href="index.php" class="menu-link ">
                <i class="menu-icon tf-iqcons bx bx-home-circle"></i>
-               <div data-i18n="Dashboards" class="fs-5">Dashboards</div>
+               <div data-i18n="Dashboards" class="fs-5">Dashboard</div>
              </a>
            </li>
 
@@ -184,7 +193,7 @@
            </li>
            <!-- Apps -->
            <li class="menu-item">
-             <a href="#" class="menu-link">
+             <a href="my_profile.php" class="menu-link">
                <i class="menu-icon tf-icons bx bx-user"></i>
 
                <div data-i18n="Email" class="fs-5">My Profile</div>
@@ -199,7 +208,7 @@
              </a>
            </li>
            <li class="menu-item">
-             <a href="#" class="menu-link">
+             <a href="logout.php" class="menu-link">
                <i class="menu-icon tf-icons bx bx-power-off"></i>
                <div data-i18n="Calendar" class="fs-5">Log Out</div>
 
@@ -234,7 +243,7 @@
                <li class="nav-item navbar-dropdown dropdown-user dropdown">
                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                    <div class="avatar avatar-online">
-                     <img src="../bootstrap-config/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                     <img src="../images/admin_pictures/<?php echo $fetch_admin['images'] ?>" alt class="w-px-40 h-px-40 rounded-circle" />
                    </div>
                  </a>
                  <ul class="dropdown-menu dropdown-menu-end">
@@ -243,11 +252,11 @@
                        <div class="d-flex">
                          <div class="flex-shrink-0 me-3">
                            <div class="avatar avatar-online">
-                             <img src="../bootstrap-config/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                             <img src="../images/admin_pictures/<?php echo $fetch_admin['images'] ?>" alt class="w-px-40 h-px-40 rounded-circle" />
                            </div>
                          </div>
                          <div class="flex-grow-1">
-                           <span class="fw-medium d-block">John Doe</span>
+                           <span class="fw-medium d-block"><?php echo $fetch_admin['surname'] . " " . $fetch_admin['lastname'] ?></span>
                            <small class="text-muted">Admin</small>
                          </div>
                        </div>
@@ -257,7 +266,7 @@
                      <div class="dropdown-divider"></div>
                    </li>
                    <li>
-                     <a class="dropdown-item" href="#">
+                     <a class="dropdown-item" href="my_profile.php">
                        <i class="bx bx-user"></i>
                        <span class="align-middle">My Profile</span>
                      </a>
@@ -273,7 +282,7 @@
                      <div class="dropdown-divider"></div>
                    </li>
                    <li>
-                     <a class="dropdown-item" href="../public/auth_login.php">
+                     <a class="dropdown-item" href="../public/logout.php">
                        <i class="bx bx-power-off me-2"></i>
                        <span class="align-middle">Log Out</span>
                      </a>

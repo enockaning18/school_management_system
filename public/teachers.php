@@ -24,8 +24,8 @@ if (isset($_POST['add_teacher'])) {
   $file_error = $_FILES['image']['error'];
   $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
   $file_own_extension = strtolower($file_extension);
-  $extension_allowed = array('jpg', 'png', 'jpeg', 'heic','svg', 'webp', 'bmp','tiff', 'ico');;
-  
+  $extension_allowed = array('jpg', 'png', 'jpeg', 'heic', 'svg', 'webp', 'bmp', 'tiff', 'ico');;
+
 
 
   if (in_array($file_own_extension, $extension_allowed)) {
@@ -114,7 +114,7 @@ if (isset($_POST['add_class'])) {
   $file_error = $_FILES['class_image']['error'];
   $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
   $file_own_extension = strtolower($file_extension);
-  $extension_allowed = array('jpg', 'png', 'jpeg', 'heic','svg', 'webp', 'bmp','tiff', 'ico');
+  $extension_allowed = array('jpg', 'png', 'jpeg', 'heic', 'svg', 'webp', 'bmp', 'tiff', 'ico');
 
 
   if (in_array($file_own_extension, $extension_allowed)) {
@@ -519,10 +519,17 @@ $table_result = mysqli_query($database_connection, $query_command);
                         <tr>
 
                           <td>
-                            <div class="flex-row align-items-center ms-auto ">
-                              <img src="../images/teachers_pictures/<?php echo $fetch_result['images']; ?>" alt="Avatar" class="rounded-circle avatar avatar-xd me-3" />
-                              <span class="fw-medium"> <?php echo $fetch_result['teachers_id'] ?></span>
+                            <div class="d-flex justify-content-start align-items-center user-name">
+                              <div class="avatar-wrapper">
+                                <div class="avatar me-2"><img src="../images/teachers_pictures/<?php echo $fetch_result['images']; ?>" alt="Avatar" class="rounded-circle"></div>
+                              </div>
+                              <div class="d-flex flex-column">
+                                <span class="emp_name text-truncate"><?php echo $fetch_result['first_name']. ' ' .$fetch_result['last_name'] ?></span>
+                                <small class="emp_post text-truncate text-muted"><?php echo $fetch_result['teachers_id'] ?></small>
+                              </div>
                             </div>
+
+
                           </td>
 
                           <td>

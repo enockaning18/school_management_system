@@ -37,13 +37,11 @@ if (isset($_POST['auth_login'])) {
 
     $query_command = "SELECT * FROM admin WHERE username = '" . $username . "' AND password = '" . $password . "'";
     $result = mysqli_query($database_connection, $query_command);
-    $fetched_username = mysqli_fetch_assoc($result);
-    if ($fetched_username > 1) {
-        session_regenerate_id();
-        $_SESSION['admin_id'] = $admin['admin_id'];
-        $_SESSION['last_login'] = time();
-        $_SESSION['username'] = $admin['username'];
-        
+    $fetched_admin = mysqli_fetch_assoc($result);
+    if ($fetched_admin > 1) {
+        $_SESSION["login"] = true;
+        $_SESSION['admin_id'] = $fetched_admin["admin_id"];
+
         header('Location: ../../public/index.php');
     } else {
         header('Location: ../../public/auth_login.php');

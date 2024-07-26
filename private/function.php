@@ -8,6 +8,8 @@ function url_for($script_path)
     return WWW_ROOT . $script_path;
 }
 
+session_start();
+
 function is_logged_in()
 {
     // Having a admin_id in the session serves a dual-purpose:

@@ -58,7 +58,7 @@ if (isset($_POST['update_image'])) {
 
     $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
     $file_own_extension = strtolower($file_extension);
-    $extension_allowed = array('jpg', 'png', 'jpeg', 'heic','svg', 'webp', 'bmp','tiff', 'ico');
+    $extension_allowed = array('jpg', 'png', 'jpeg', 'heic', 'svg', 'webp', 'bmp', 'tiff', 'ico');
 
     if (in_array($file_own_extension, $extension_allowed)) {
         if ($file_error === 0) {
@@ -286,6 +286,19 @@ if (isset($_POST['update_image'])) {
                 } else {
                     echo "Error " . mysqli_stmt_error($statement);
                 }
+            } else {
+                echo '                
+                <div class="position-absolute top-50 start-50 translate-right bs-toast toast fade show bg-danger  top-0 end-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                    <i class="bx bx-bell me-2"></i>
+                    <div class="me-auto fw-medium">Notification</div>
+                    <small>0 mins ago</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                    Select Confirm before account can be deactivated.
+                    </div>
+                </div>';
             }
         }
 
