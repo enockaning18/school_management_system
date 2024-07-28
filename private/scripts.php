@@ -11,28 +11,10 @@
       ref: 'PSK_' + Math.floor((Math.random() * 1000000000) + 1), // Generate a random reference
       callback: function(response) {
         // Payment successful
-        // You can verify the transaction with your server here      
-        alert('Payment successful. Transaction reference: ' + response.reference);
-        // Prepare data to send to the server
-        var data = {
-          payment_id: response.reference,
-          student_id: document.getElementById('student_id').value,
-          fee_id: document.getElementById('fee_id').value,
-          amount_payed: document.getElementById('amount_payed').value,
-          payment_method: 'Paystack',
-          payment_date: new Date().toISOString()
-        };
+        var reference = response.reference;
 
-        // Send data to server using AJAX
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "../public/pay_fees.php", true);
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log('Server response:', xhr.responseText);
-          }
-        };
-        xhr.send(JSON.stringify(data));
+        // Verify the transaction
+        verifyTransaction(reference);
       },
       onClose: function() {
         Swal.fire({
@@ -44,5 +26,43 @@
       }
     });
     handler.openIframe();
+  }
+
+  function verifyTransaction(reference) {
+    // Prepare data to send to the server
+    var data = {
+      payment_id: reference,
+      student_id: document.getElementById('student_id').value,
+      fee_id: document.getElementById('fee_id').value,
+      amount_payed: document.getElementById('amount_payed').value,
+      payment_method: 'Paystack',
+      payment_date: new Date().toISOString()
+    };
+
+    // Send data to server for verification and database update using AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "verify_payment.php", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var response = JSON.parse(xhr.responseText);
+        if (response.status === 'success') {
+          Swal.fire({
+            title: 'Success!',
+            text: 'Payment verified and recorded successfully.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Payment verification failed. Please contact support.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+      }
+    };
+    xhr.send(JSON.stringify(data));
   }
 </script>
