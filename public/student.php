@@ -11,7 +11,7 @@ $query_command = 'SELECT surname, othername FROM student';
 $student_result = mysqli_query($database_connection, $query_command);
 
 $query_command = "SELECT * FROM class";
-$class_result = mysqli_query($database_connection,$query_command);
+$class_result = mysqli_query($database_connection, $query_command);
 
 
 
@@ -168,7 +168,7 @@ $class_result = mysqli_query($database_connection,$query_command);
                     <select id="country" name="class_id" class="select2 form-select">
                       <option value=" ">Select Class</option>
                       <?php while ($fetch_class_combo = mysqli_fetch_assoc($class_result)) { ?>
-                        <option value="<?php echo $fetch_class_combo['class_id']; ?>"><?php echo $fetch_class_combo['class_name']?></option>
+                        <option value="<?php echo $fetch_class_combo['class_id']; ?>"><?php echo $fetch_class_combo['class_name'] ?></option>
                       <? } ?>
                     </select>
                   </div>
@@ -329,6 +329,7 @@ $class_result = mysqli_query($database_connection,$query_command);
                     <?php } ?>
                   </tbody>
                 </table>
+                <button onclick="printResult()" class="btn btn-primary mt-3">Print Result</button>
               </div>
             </div>
             <!--/ Hoverable Table rows -->
@@ -343,7 +344,16 @@ $class_result = mysqli_query($database_connection,$query_command);
   <!-- ends here -->
 </div>
 <!-- Content wrapper -->
+<script>
+  function printResult() {
+    var printContents = document.getElementById('result-table').outerHTML;
+    var originalContents = document.body.innerHTML;
 
+    document.body.innerHTML = '<table>' + printContents + '</table>';
+    window.print();
+    document.body.innerHTML = originalContents;
+  }
+</script>
 <?php
 
 include(SHARED_PATH . "/footer.php");

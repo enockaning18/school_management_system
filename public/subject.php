@@ -5,18 +5,18 @@ include(SHARED_PATH . "/navbar.php");
 
 
 if (isset($_POST['add_subject'])) {
-    $subject_id = str_pad(rand(0, 9999999), 7, '0', STR_PAD_LEFT);
-    $subject_name = $_POST['subject_name'];
-    $teacher_id = $_POST['teacher_id'];
-    $class_id = $_POST['class_id'];
-    $duration = $_POST['duration'];
+  $subject_id = str_pad(rand(0, 9999999), 7, '0', STR_PAD_LEFT);
+  $subject_name = $_POST['subject_name'];
+  $teacher_id = $_POST['teacher_id'];
+  $class_id = $_POST['class_id'];
+  $duration = $_POST['duration'];
 
-    $query_command = "INSERT INTO subject(subject_id, subject_name, teacher_id, class_id, duration) VALUES(?,?,?,?,?)";
-    $statement = mysqli_prepare($database_connection, $query_command);
-    mysqli_stmt_bind_param($statement, 'isiis', $subject_id, $subject_name, $teacher_id, $class_id, $duration);
+  $query_command = "INSERT INTO subject(subject_id, subject_name, teacher_id, class_id, duration) VALUES(?,?,?,?,?)";
+  $statement = mysqli_prepare($database_connection, $query_command);
+  mysqli_stmt_bind_param($statement, 'isiis', $subject_id, $subject_name, $teacher_id, $class_id, $duration);
 
-    if (mysqli_stmt_execute($statement)) {
-        echo "<script>
+  if (mysqli_stmt_execute($statement)) {
+    echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
                     Swal.fire({
                         title: 'Success!',
@@ -28,9 +28,9 @@ if (isset($_POST['add_subject'])) {
                     });
                 });
               </script>";
-    } else {
-        echo mysqli_error($database_connection);
-    }
+  } else {
+    echo mysqli_error($database_connection);
+  }
 }
 
 
@@ -176,6 +176,7 @@ $subject_result = mysqli_query($database_connection, $query_command);
                       <?php } ?>
                     </tbody>
                   </table>
+                  <button onclick="printResult()" class="btn btn-primary mt-3">Print Subjects</button>
                 </div>
               </div>
             </div>
@@ -187,9 +188,20 @@ $subject_result = mysqli_query($database_connection, $query_command);
   </div>
 </div>
 <!-- Content wrapper -->
-<?php 
+
+<script>
+  function printResult() {
+    var printContents = document.getElementById('result-table').outerHTML;
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = '<table>' + printContents + '</table>';
+    window.print();
+    document.body.innerHTML = originalContents;
+  }
+</script>
+<?php
 if ($database_connection) {
-    mysqli_close($database_connection);
+  mysqli_close($database_connection);
 }
-include(SHARED_PATH . "/footer.php"); 
+include(SHARED_PATH . "/footer.php");
 ?>

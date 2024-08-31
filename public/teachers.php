@@ -524,7 +524,7 @@ $table_result = mysqli_query($database_connection, $query_command);
                                 <div class="avatar me-2"><img src="../images/teachers_pictures/<?php echo $fetch_result['images']; ?>" alt="Avatar" class="rounded-circle"></div>
                               </div>
                               <div class="d-flex flex-column">
-                                <span class="emp_name text-truncate"><?php echo $fetch_result['first_name']. ' ' .$fetch_result['last_name'] ?></span>
+                                <span class="emp_name text-truncate"><?php echo $fetch_result['first_name'] . ' ' . $fetch_result['last_name'] ?></span>
                                 <small class="emp_post text-truncate text-muted"><?php echo $fetch_result['teachers_id'] ?></small>
                               </div>
                             </div>
@@ -562,6 +562,7 @@ $table_result = mysqli_query($database_connection, $query_command);
                       <?php } ?>
                     </tbody>
                   </table>
+                  <button onclick="printResult()" class="btn btn-primary mt-3">Print Result</button>
                 </div>
               </div>
               <!--/ Hoverable Table rows -->
@@ -600,6 +601,17 @@ $table_result = mysqli_query($database_connection, $query_command);
 </div>
 <!-- ends here -->
 </div>
+
+<script>
+  function printResult() {
+    var printContents = document.getElementById('result-table').outerHTML;
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = '<table>' + printContents + '</table>';
+    window.print();
+    document.body.innerHTML = originalContents;
+  }
+</script>
 <!-- Content wrapper -->
 <?php mysqli_close($database_connection); ?>
 <?php include(SHARED_PATH . "/footer.php");

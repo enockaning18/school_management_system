@@ -10,11 +10,10 @@
       currency: "GHS",
       ref: 'PSK_' + Math.floor((Math.random() * 1000000000) + 1), // Generate a random reference
       callback: function(response) {
-        // Payment successful
-        var reference = response.reference;
-
-        // Verify the transaction
-        verifyTransaction(reference);
+        let message = 'Payment was complete: ' + response.reference;
+        alert(message);
+        window.location.href = "http://localhost/1111/private/verify.php?reference=" + response.reference;
+      
       },
       onClose: function() {
         Swal.fire({
