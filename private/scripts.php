@@ -8,11 +8,13 @@
       email: document.getElementById('email_address').value,
       amount: document.getElementById('amount_payed').value * 100, // Amount in kobo
       currency: "GHS",
+      first_name: 'Okyere',
+      last_name: 'Enock',
       ref: 'PSK_' + Math.floor((Math.random() * 1000000000) + 1), // Generate a random reference
       callback: function(response) {
         let message = 'Payment was complete: ' + response.reference;
         alert(message);
-        window.location.href = "http://localhost/1111/private/verify.php?reference=" + response.reference;
+        window.location.href = "http://localhost/1111/public/view_transactions.php?reference=" + response.reference;
       
       },
       onClose: function() {
