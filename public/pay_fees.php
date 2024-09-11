@@ -111,7 +111,7 @@ if (!empty($_SESSION["admin_id"])) {
                                                     <label class="form-label" for="country">Amount</label>
                                                     <div>
                                                         <div class="input-group input-group-merge">
-                                                        <box-icon name='dollar-circle'></box-icon>
+                                                            <box-icon name='dollar-circle'></box-icon>
                                                             <span id="basic-icon-default-dollar-circle" class="input-group-text"><i class="dollar-circle"></i></span>
                                                             <input type="number" name="amount_payed" id="amount_payed" class="form-control" placeholder="GH 0.00" aria-label="GH 0.00" aria-describedby="basic-icon-default-company2">
                                                         </div>
@@ -129,6 +129,35 @@ if (!empty($_SESSION["admin_id"])) {
                                     </div>
                                 </form>
                             </div>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    // Handle fetching students based on exams code
+                                    document.getElementById('class_id').addEventListener('change', function() {
+                                        var class_id = this.value;
+                                        var studentSelect = document.getElementById('student_id');
+                                        studentSelect.innerHTML = '<option value="">Select Student</option>'; // Reset the students combo box
+
+                                        if (class_id) {
+                                            var xhr = new XMLHttpRequest();
+                                            xhr.open('POST', 'fetch_fees_students.php', true);
+                                            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                                            xhr.onreadystatechange = function() {
+                                                if (xhr.readyState === 4 && xhr.status === 200) {
+                                                    var students = JSON.parse(xhr.responseText);
+                                                    students.forEach(function(student) {
+                                                        var option = document.createElement('option');
+                                                        option.value = student.student_id;
+                                                        option.textContent = student.surname + ' ' + student.othername + ' ' + student.firstname;
+                                                        studentSelect.appendChild(option);
+                                                    });
+                                                }
+                                            };
+                                            xhr.send('class_id=' + encodeURIComponent(class_id));                                            
+                                        }
+                                    });
+                                });
+                            </script>
 
                             <!-- fees assignment here -->
                             <div class="tab-pane fade" id="navs-pills-justified-fees" role="tabpanel">
@@ -176,39 +205,12 @@ if (!empty($_SESSION["admin_id"])) {
     mysqli_close($database_connection); ?>
     <?php include "../private/shared/footer.php"; ?>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Handle fetching students based on exams code
-            document.getElementById('class_id').addEventListener('change', function() {
-                var class_id = this.value;
-                var studentSelect = document.getElementById('student_id');
-                studentSelect.innerHTML = '<option value="">Select Student</option>'; // Reset the students combo box
 
-                if (class_id) {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('POST', 'fetch_fees_students.php', true);
-                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState === 4 && xhr.status === 200) {
-                            var students = JSON.parse(xhr.responseText);
-                            students.forEach(function(student) {
-                                var option = document.createElement('option');
-                                option.value = student.student_id;
-                                option.textContent = student.surname + ' ' + student.othername + ' ' + student.firstname;
-                                studentSelect.appendChild(option);
-                            });
-                        }
-                    };
-                    xhr.send('class_id=' + encodeURIComponent(class_id));
-                }
-            });
-        });
-    </script>
 
 <?php
 } else {
     header("Location: auth_login.php");
-    exit; // It's a good practice to call exit after a header redirect
+    exit;
 }
 ob_end_flush(); // Flush the output buffer
 

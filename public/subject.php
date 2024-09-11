@@ -24,7 +24,7 @@ if (isset($_POST['add_subject'])) {
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(function() {
-                        
+                      window.location.href = 'subject.php'
                     });
                 });
               </script>";

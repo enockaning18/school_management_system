@@ -224,7 +224,7 @@ $teacher_result = mysqli_query($database_connection, $query_command);
 $query_command = "SELECT * FROM class";
 $class_result = mysqli_query($database_connection, $query_command);
 
-$query_command = "SELECT * FROM teachers";
+$query_command = "SELECT * FROM teachers JOIN class ON class.teachers_id = teachers.teachers_id";
 $table_result = mysqli_query($database_connection, $query_command);
 
 
@@ -451,6 +451,7 @@ $table_result = mysqli_query($database_connection, $query_command);
                                     <label for="class" class="form-label">Class</label>
                                     <select id="class" name="class" class="select2 form-select">
                                       <option value="">Select Class</option>
+                                      <option value="0">N/A</option>
                                       <?php while ($class_data = mysqli_fetch_assoc($class_result)) { ?>
                                         <option value="<?php echo $class_data['class_id'] ?>"><?php echo $class_data['class_name'] ?></option>
                                       <?php } ?>
@@ -495,7 +496,7 @@ $table_result = mysqli_query($database_connection, $query_command);
           <div class="tab-pane fade " id="navs-pills-justified-messages" role="tabpanel">
             <!-- form starts here -->
             <div class="p-3 ">
-              <h5 class="card-header mb-4">Teachers Table</h5>
+              <h5 class="card-header mb-4">Assigned Teachers Table</h5>
 
               <!-- Hoverable Table rows -->
               <div class="card-body">
@@ -504,14 +505,12 @@ $table_result = mysqli_query($database_connection, $query_command);
                   <table class="table table-hover">
                     <thead>
                       <tr class="flex-row align-items-center ms-auto ">
-                        <th>Student ID</th>
-                        <th>Full Name</th>
-                        <th>Nationality</th>
-                        <th>Age</th>
-                        <th>Date Of Birth</th>
+                        <th >Student ID</th>
                         <th>Class</th>
-                        <th></th>
-                        <th></th>
+                        <th>Course</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
@@ -523,9 +522,9 @@ $table_result = mysqli_query($database_connection, $query_command);
                               <div class="avatar-wrapper">
                                 <div class="avatar me-2"><img src="../images/teachers_pictures/<?php echo $fetch_result['images']; ?>" alt="Avatar" class="rounded-circle"></div>
                               </div>
-                              <div class="d-flex flex-column">
-                                <span class="emp_name text-truncate"><?php echo $fetch_result['first_name'] . ' ' . $fetch_result['last_name'] ?></span>
-                                <small class="emp_post text-truncate text-muted"><?php echo $fetch_result['teachers_id'] ?></small>
+                              <div class="d-flex flex-column ">
+                                <span class="emp_name text-truncate "><?php echo $fetch_result['first_name'] . ' ' . $fetch_result['last_name'] ?></span>
+                                <span class="emp_post text-truncate "><?php echo $fetch_result['teachers_id'] ?></span>
                               </div>
                             </div>
 
@@ -534,17 +533,31 @@ $table_result = mysqli_query($database_connection, $query_command);
 
                           <td>
                             <div class="flex-row align-items-center ms-auto ">
-                              <span class="fw-medium"> <?php echo $fetch_result['first_name'] . ' ' . $fetch_result['last_name'] ?></span>
+                              <span class="fw-medium"> <?php if (!empty($fetch_result['class_name'])) {
+                                                          echo $fetch_result['class_name'];
+                                                        } else {
+                                                          echo "Null";
+                                                        } ?></span>
                             </div>
                           </td>
 
                           <td>
                             <div class="flex-row align-items-center ms-auto ">
-                              <span class="fw-medium"> <?php echo $fetch_result['nationality'] ?></span>
+                              <span class="fw-medium badge bg-label-primary me-1">
+                                <?php if (!empty($fetch_result['subject'])) {
+                                  echo $fetch_result['subject'];
+                                } else {
+                                  echo "Null";
+                                } ?>
+
+                              </span>
                             </div>
                           </td>
                           <td>
-                            <span class="badge bg-label-primary me-1"><?php echo $fetch_result['phone'] ?></span>
+                            <span><?php echo $fetch_result['phone'] ?></span>
+                          </td>
+                          <td>
+                            <span><?php echo $fetch_result['email'] ?></span>
                           </td>
                           <td>
                             <div class="dropdown">

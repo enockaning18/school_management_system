@@ -23,17 +23,19 @@ if (!$result || mysqli_num_rows($result) === 0) {
     exit;
 }
 
-while ($fetched_teacher_data = mysqli_fetch_assoc($result)) {
+
 ?>
 
-    <!-- Content wrapper -->
-    <div class="content-wrapper">
-        <!-- Content -->
-        <div class="container-xxl flex-grow-1 container-p-y">
-            <div class="card mb-4">
-                <div class="user-profile-header-banner">
-                    <img src="profile-banner.png" alt="Banner image" class="rounded-top img-fluid">
-                </div>
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="card mb-4">
+            <div class="user-profile-header-banner">
+                <img src="profile-banner.png" alt="Banner image" class="rounded-top img-fluid">
+            </div>
+            <?php while ($fetched_teacher_data = mysqli_fetch_assoc($result)) { ?>
+
                 <div class="user-profile-header d-flex flex-column flex-sm-row text-sm-start text-center mb-4">
                     <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
                         <img src="../images/teachers_pictures/<?php echo htmlspecialchars($fetched_teacher_data['images']); ?>" alt="user image" width="130" class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img">
@@ -54,14 +56,15 @@ while ($fetched_teacher_data = mysqli_fetch_assoc($result)) {
                                     </li>
                                 </ul>
                             </div>
-                            <a href="<?php echo url_for('attendance.php?class_id='.$class_id) ?>" class="btn btn-primary text-nowrap">
+                            <a href="<?php echo url_for('attendance.php?class_id=' . $class_id) ?>" class="btn btn-primary text-nowrap">
                                 <i class="bx bx-user-check me-1"></i>Attendance
-                            </a>                            
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
-        <?php } ?>
+            <?php } ?>
+        </div>
+
 
         <!-- Pagination logic -->
         <?php
@@ -164,14 +167,14 @@ while ($fetched_teacher_data = mysqli_fetch_assoc($result)) {
                 </ul>
             </nav>
         <?php } ?>
-        </div>
+
     </div>
-    <!-- Content wrapper -->
+</div>
+<!-- Content wrapper -->
+<?php include "../private/shared/footer.php"; ?>
 
-    <?php include(SHARED_PATH . "/footer.php"); ?>
-
-    <?php
-    mysqli_free_result($result);
-    mysqli_free_result($student_result);
-    mysqli_close($database_connection);
-    ?>
+<?php
+mysqli_free_result($result);
+mysqli_free_result($student_result);
+mysqli_close($database_connection);
+?>

@@ -30,7 +30,7 @@ if (isset($_GET['reference'])) {
             echo "cURL Error #:" . $err;
         } else {
             $verify_responds = json_decode($response, true); // Decode JSON as an associative array
-            if ($verify_responds['status'] == true) {            
+            if ($verify_responds['status'] == true) {
 
                 echo "Message: " . $transaction_message = $verify_responds['message'];
                 echo "<br>";
@@ -39,6 +39,10 @@ if (isset($_GET['reference'])) {
                 echo "Receipt Number: " . $transaction_num = $verify_responds['data']['receipt_number'];
                 echo "<br>";
                 echo "Gateway Response: " . $gateway_response = $verify_responds['data']['gateway_response'];
+                echo "<br>";
+                echo "First Name: " . $first_name = $verify_responds['data']['customer']['last_name'];
+                echo "<br>";
+                echo "Last Name: " . $last_name = $verify_responds['data']['customer']['last_name'];
             }
         }
     }

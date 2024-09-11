@@ -101,6 +101,12 @@
                    <div data-i18n="Email" class="fs-5">Exams</div>
                  </a>
                </li>
+               <li class="menu-item">
+                 <a href="result.php" class="menu-link">
+                   <i class="menu-icon tf-icons bx bx-credit-card"></i>
+                   <div data-i18n="Email" class="fs-5">Result</div>
+                 </a>
+               </li>
              </ul>
            </li>
 

@@ -35,13 +35,7 @@ if (isset($_GET['reference'])) {
       $verify_responds = json_decode($response, true); // Decode JSON as an associative array
       if ($verify_responds['status'] == true) {       
 
-        echo "Message: " . $transaction_message = $verify_responds['message'];
-        echo "<br>";
-        echo "Email: " . $transaction_email = $verify_responds['data']['customer']['email'];
-        echo "<br>";
-        echo "Receipt Number: " . $transaction_num = $verify_responds['data']['receipt_number'];
-        echo "<br>";
-        echo "Gateway Response: " . $gateway_response = $verify_responds['data']['gateway_response'];
+        echo $response;
       }
     }
   }

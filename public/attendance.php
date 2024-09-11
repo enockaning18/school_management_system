@@ -2,6 +2,16 @@
 include("../private/initialize.php");
 include(SHARED_PATH . "/navbar.php");
 
+if (!empty($_SESSION["admin_id"])) {
+    $admin_id = $_SESSION["admin_id"];
+    $query_command = "SELECT * FROM admin WHERE admin_id = $admin_id";
+    $result = mysqli_query($database_connection, $query_command);
+    $fetch_admin = mysqli_fetch_assoc($result);
+} else {
+    header("Location: auth_login.php");
+    exit; // It's a good practice to call exit after a header redirect
+}
+
 $class_id = $_GET['class_id'] ?? null;
 
 // Sanitize the class_id to prevent SQL injection

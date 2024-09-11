@@ -3,6 +3,41 @@ include("../private/initialize.php");
 include(SHARED_PATH . "/navbar.php");
 require_login();
 $subject_id = $_GET['subject_id'] ?? 'User not found'; // PHP > 7.0
+
+////////////update student code starts here ////////////////
+if (isset($_POST['update_subject'])) {
+    $get_fields['subject_id'] = $subject_id;
+    $get_fields['subject_name'] = $_POST['subject_name'];
+    $fetched_subject_teacher['teachers_id'] = $_POST['teacher_id'];
+    $fetched_subject_class['class_id'] = $_POST['class_id'];
+
+
+
+    $query_command = "UPDATE subject SET ";
+    $query_command .= "subject_name = '" . $get_fields['subject_name'] . "',";
+    $query_command .= "teacher_id = '" . $fetched_subject_teacher['teachers_id'] . "',";
+    $query_command .= "class_id = '" . $fetched_subject_class['class_id'] . " ' ";
+    $query_command .= " WHERE subject_id = '" . $get_fields['subject_id'] . "'";
+
+
+    $result = mysqli_query($database_connection, $query_command);
+    if ($result) {
+        echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            swal.fire({
+                title: 'Success!',
+                text: 'Subject Updated.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(function() {                
+                window.location.href = 'edit_subject.php?subject_id=' + $subject_id;                
+            });
+        });
+      </script>";
+    } else {
+        echo mysqli_error($database_connection);
+    }
+}
 ?>
 
 
@@ -55,7 +90,7 @@ $subject_id = $_GET['subject_id'] ?? 'User not found'; // PHP > 7.0
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="country">Teacher</label>
                                                 <select id="teacher" name="teacher_id" class="select2 form-select">
-                                                    <option value="">Select</option>
+                                                    <option value="<?php echo $fetched_subject_teacher['teachers_id'] ?>"><?php echo $fetched_subject_teacher['first_name'] . ' ' . $fetched_subject_teacher['last_name'] ?></option>
                                                     <?php while ($fetched_subject_teacher = mysqli_fetch_assoc($teacher_subject_result)) { ?>
                                                         <option value="<?php echo $fetched_subject_teacher['teachers_id'] ?>"> <?php echo $fetched_subject_teacher['first_name'] . ' ' . $fetched_subject_teacher['last_name'] ?></option>
                                                     <?php } ?>
@@ -91,7 +126,7 @@ $subject_id = $_GET['subject_id'] ?? 'User not found'; // PHP > 7.0
 
                                     </div>
                                     <div class="mt-2">
-                                        <button type="submit" name="update_student" class="btn btn-primary me-2"> Save Changes </button>
+                                        <button type="submit" name="update_subject" class="btn btn-primary me-2"> Save Changes </button>
                                     </div>
 
 

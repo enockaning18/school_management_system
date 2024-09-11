@@ -13,10 +13,6 @@ $student_result = mysqli_query($database_connection, $query_command);
 $query_command = "SELECT * FROM class";
 $class_result = mysqli_query($database_connection, $query_command);
 
-
-
-
-
 ?>
 
 
@@ -280,12 +276,12 @@ $class_result = mysqli_query($database_connection, $query_command);
                   <thead>
                     <tr class="flex-row align-items-center ms-auto ">
                       <th>Student ID</th>
-                      <th>Full Name</th>
-                      <th>Nationality</th>
-                      <th>Age</th>
+                      <th>Phone</th>
+                      <th>Email</th>
+                      <th>Language Spoken</th>
                       <th>Date Of Birth</th>
-                      <th></th>
-                      <th></th>
+                      <th>Age</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody class="table-border-bottom-0">
@@ -293,25 +289,49 @@ $class_result = mysqli_query($database_connection, $query_command);
                       <tr>
 
                         <td>
-                          <div class="flex-row align-items-center ms-auto ">
-                            <img src="../images/student_pictures/<?php echo $fetch_result['images']; ?>" alt="Avatar" class="rounded-circle avatar avatar-xd me-3" />
-                            <span class="fw-medium"> <?php echo $fetch_result['student_id'] ?></span>
+                          <div class="d-flex justify-content-start align-items-center user-name">
+                            <div class="avatar-wrapper">
+                              <div class="avatar me-2"><img src="../images/student_pictures/<?php echo $fetch_result['images']; ?>" alt="Avatar" class="rounded-circle"></div>
+                            </div>
+                            <div class="d-flex flex-column ">
+                              <span class="emp_name text-truncate "><?php echo $fetch_result['surname'] . ' ' . $fetch_result['othername'] ?></span>
+                              <span class="emp_post text-truncate "><?php echo $fetch_result['student_id'] ?></span>
+                            </div>
                           </div>
                         </td>
 
                         <td>
                           <div class="flex-row align-items-center ms-auto ">
-                            <span class="fw-medium"> <?php echo $fetch_result['surname'] . ' ' . $fetch_result['othername'] . ' ' . $fetch_result['firstname'] ?></span>
+                            <span class="fw-medium"> <?php echo $fetch_result['phonenumber'] ?></span>
                           </div>
                         </td>
-                        <td><?php echo $fetch_result['othername'] ?></td>
                         <td>
                           <div class="flex-row align-items-center ms-auto ">
-                            <span class="fw-medium"> <?php echo $fetch_result['nationality'] ?></span>
+                            <span class="fw-medium">
+                              <?php echo $fetch_result['email'] ?>
+                            </span>
                           </div>
                         </td>
                         <td>
-                          <span class="badge bg-label-primary me-1"><?php echo $fetch_result['phonenumber'] ?></span>
+                          <div class="flex-row align-items-center ms-auto ">
+                            <span class="fw-medium">
+                              <?php echo $fetch_result['language'] ?>
+                            </span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="flex-row align-items-center ms-auto">
+                            <span class="fw-medium">
+                              <?php echo $fetch_result['dateofbirth'] ?>
+                            </span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="flex-row align-items-center ms-auto">
+                            <span class="fw-medium">
+                              <?php echo $fetch_result['age'] ?>
+                            </span>
+                          </div>
                         </td>
                         <td>
                           <div class="dropdown">
