@@ -4,7 +4,7 @@
 <script type="text/javascript">
   function payWithPaystack() {
     var handler = PaystackPop.setup({
-        key: 'pk_test_b931fa8c6c4b75e1d0a6ad8d6a564febf69876f5',
+        key: 'pk_live_1331391d9362adc096ed00e574cd590fcc024896',
         email: document.getElementById('email_address').value,
         student_id: document.getElementById('student_id').value,
         purpose: document.getElementById('payment').value,
@@ -38,8 +38,6 @@
     });
     handler.openIframe();
 }
-
-
   function verifyTransaction(reference) {
     // Prepare data to send to the server
     var data = {

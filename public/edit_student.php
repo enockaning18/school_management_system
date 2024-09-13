@@ -45,8 +45,7 @@ if (isset($_POST['update_student'])) {
                 window.location.href = 'edit_student.php?student_id=' + $student_id;                
             });
         });
-      </script>";            
-      
+      </script>";
     } else {
         mysqli_error($database_connection);
     }
@@ -272,7 +271,7 @@ if (isset($_POST['update_image'])) {
                                     <input class="form-check-input" type="checkbox" name="account_deactivate" id="account_deactivate" />
                                     <label class="form-check-label" for="account_deactivate">I confirm my account deactivation</label>
                                 </div>
-                                <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
+                                <button type="submit" name="delete_student" class="btn btn-danger deactivate-account">Deactivate Account</button>
                             </form>
                         </div>
                     </div>
@@ -285,33 +284,34 @@ if (isset($_POST['update_image'])) {
 
         <?php
 
-        // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        //     if (isset($_POST['account_deactivate']) && $_POST['account_deactivate'] === 'on') {
-        //         $student_id;
+        if (isset($_POST["delete_student"])) {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                if (isset($_POST['account_deactivate']) && $_POST['account_deactivate'] === 'on') {                    
 
-        //         $query_command = "DELETE FROM student WHERE student_id = ?";
-        //         $statement = mysqli_prepare($database_connection, $query_command);
-        //         mysqli_stmt_bind_param($statement, 'i', $student_id);
-        //         if (mysqli_stmt_execute($statement)) {
-        //             header("Location: teacher.php");
-        //         } else {
-        //             echo "Error " . mysqli_stmt_error($statement);
-        //         }
-        //     } else {
-        //         echo '                
-        //         <div class="position-absolute top-50 start-50 translate-right bs-toast toast fade show bg-danger  top-0 end-0" role="alert" aria-live="assertive" aria-atomic="true">
-        //             <div class="toast-header">
-        //             <i class="bx bx-bell me-2"></i>
-        //             <div class="me-auto fw-medium">Notification</div>
-        //             <small>0 mins ago</small>
-        //             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        //             </div>
-        //             <div class="toast-body">
-        //             Select Confirm before account can be deactivated.
-        //             </div>
-        //         </div>';
-        //     }
-        // }
+                    $query_command = "DELETE FROM student WHERE student_id = ?";
+                    $statement = mysqli_prepare($database_connection, $query_command);
+                    mysqli_stmt_bind_param($statement, 'i',  $student_id);
+                    if (mysqli_stmt_execute($statement)) {
+                        header("Location: delete_message.php");
+                    } else {
+                        echo "Error " . mysqli_stmt_error($statement);            
+                    }
+                } else {
+                    echo '                
+            <div class="position-absolute top-50 start-50 translate-right bs-toast toast fade show bg-danger  top-0 end-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                <i class="bx bx-bell me-2"></i>
+                <div class="me-auto fw-medium">Notification</div>
+                <small>0 mins ago</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                Select Confirm before account can be deactivated.
+                </div>
+            </div>';
+                }
+            }
+        }
 
 
 

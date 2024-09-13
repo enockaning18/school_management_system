@@ -1,6 +1,6 @@
 <?php
 include("../initialize.php");
-
+include("../shared/bootstrap-script.php");
 
 if (isset($_POST['auth_register'])) {
     // Generate a random 7-digit number
@@ -23,27 +23,38 @@ if (isset($_POST['auth_login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // // Validations
-    // if (!isset($username) || trim($username) === '') {
-    //     $errors[] = "Username cannot be blank.";
-    // }
-    // if (!isset($password) || trim($password) === '') {
-    //     $errors[] = "Password cannot be blank.";
-    // }
-
-    // if there were no errors, try to login
-    // if (empty($errors)) {
-    // Using one variable ensures that msg is the same
-
     $query_command = "SELECT * FROM admin WHERE username = '" . $username . "' AND password = '" . $password . "'";
     $result = mysqli_query($database_connection, $query_command);
     $fetched_admin = mysqli_fetch_assoc($result);
     if ($fetched_admin > 1) {
         $_SESSION["login"] = true;
         $_SESSION['admin_id'] = $fetched_admin["admin_id"];
-
-        header('Location: ../../public/index.php');
+        echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: 'Success!',
+                text: 'Login Successfull.',                
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(function() {
+                window.location.href = '../../public/index.php';                
+            });
+        });
+      </script>";
+        // header('Location: ../../public/index.php');
     } else {
-        header('Location: ../../public/auth_login.php');
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Warning!',
+                        text: 'Unable to sign in check username and password.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    }).then(function() {
+                        window.location.href = '../../public/auth_login.php';                
+                    });
+                });
+              </script>";
+        // header('Location: ../../public/auth_login.php');
     }
 }

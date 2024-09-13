@@ -167,7 +167,7 @@
                  </a>
                </li>
                <li class="menu-item">
-                 <a href="all_students.php" class="menu-link">
+                 <a href="all_student.php" class="menu-link">
                    <div data-i18n="Payment" class="fs-5">All Students</div>
                  </a>
                </li>

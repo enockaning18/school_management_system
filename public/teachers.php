@@ -496,8 +496,14 @@ $table_result = mysqli_query($database_connection, $query_command);
           <div class="tab-pane fade " id="navs-pills-justified-messages" role="tabpanel">
             <!-- form starts here -->
             <div class="p-3 ">
-              <h5 class="card-header mb-4">Assigned Teachers Table</h5>
-
+              <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
+                <div>
+                  <h5 class="card-header ">Assigned Teachers Table</h5>
+                </div>
+                <div>
+                  <a href="all_teachers.php" class="btn btn-info ">Show All</a>
+                </div>
+              </div>
               <!-- Hoverable Table rows -->
               <div class="card-body">
 
@@ -505,7 +511,7 @@ $table_result = mysqli_query($database_connection, $query_command);
                   <table class="table table-hover">
                     <thead>
                       <tr class="flex-row align-items-center ms-auto ">
-                        <th >Student ID</th>
+                        <th>Student ID</th>
                         <th>Class</th>
                         <th>Course</th>
                         <th>Phone</th>
