@@ -100,9 +100,8 @@ if (isset($_POST['add_teacher'])) {
 
 
 if (isset($_POST['add_class'])) {
-  $classname = $_POST['classname'];
+  $class_name = $_POST['classname'];
   $no_student = $_POST['no_students'];
-  $subjects = $_POST['subjects'];
 
   // Generate a random 7-digit number
   $class_id = str_pad(rand(0, 9999999), 7, '0', STR_PAD_LEFT);
@@ -123,9 +122,9 @@ if (isset($_POST['add_class'])) {
         $file_new_name = uniqid('') . "." . $file_own_extension;
         $file_directory =  '../images/class_pictures/' . $file_new_name;
 
-        $query_command = "INSERT INTO class(class_id, class_name, no_student, subject, image) VALUES (?,?,?,?,?)";
+        $query_command = "INSERT INTO class(class_id, class_name, no_student, image) VALUES (?,?,?,?)";
         $statement = mysqli_prepare($database_connection, $query_command);
-        mysqli_stmt_bind_param($statement, "issss", $class_id, $classname, $no_student, $subjects, $file_new_name);
+        mysqli_stmt_bind_param($statement, "isss", $class_id, $class_name, $no_student, $file_new_name);
         if (mysqli_stmt_execute($statement)) {
           move_uploaded_file($file_temp, $file_directory);
           echo "<script>
@@ -428,10 +427,7 @@ $table_result = mysqli_query($database_connection, $query_command);
                                   <div class="mb-3 ">
                                     <label for="lastName" class="form-label">No. Students</label>
                                     <input class="form-control" type="number" name="no_students" id="classname" placeholder=" " />
-                                  </div>
-
-                                  <label for="lastName" class="form-label">Subjects</label>
-                                  <textarea id="basic-default-message" name="subjects" class="form-control" placeholder="Subjects" aria-label="Hi, Do you have a moment to talk Joe?" aria-describedby="basic-icon-default-message2"></textarea>
+                                  </div>                        
 
                                   <div class="mt-2">
                                     <button type="submit" name="add_class" class="btn btn-primary me-2"> Add Class </button>

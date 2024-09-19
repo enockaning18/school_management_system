@@ -8,6 +8,10 @@ $student_id = $_GET['student_id'] ?? 'User not found'; // PHP > 7.0
 $query_command = "SELECT * FROM student WHERE student_id = '" . $student_id . "'";
 $student_result = mysqli_query($database_connection, $query_command);
 
+$query_command = "SELECT * FROM class";
+$class_result = mysqli_query($database_connection, $query_command);
+
+
 ////////////update student code starts here ////////////////
 if (isset($_POST['update_student'])) {
     $get_fields['student_id'] = $student_id;
@@ -21,6 +25,7 @@ if (isset($_POST['update_student'])) {
     $get_fields['address'] = $_POST['address'];
     $get_fields['nationality'] = $_POST['nationality'];
     $get_fields['language'] = $_POST['language'];
+    $get_fields['class_id'] = $_POST['class_id'];
 
     $query_command = "UPDATE student SET ";
     $query_command .= "surname = '" . $get_fields['surname'] . "',";
@@ -29,7 +34,8 @@ if (isset($_POST['update_student'])) {
     $query_command .= "dateofbirth = '" . $get_fields['dateofbirth'] . "',";
     $query_command .= "phonenumber = '" . $get_fields['phonenumber'] . "',";
     $query_command .= "address = '" . $get_fields['address'] . "',";
-    $query_command .= "language = '" . $get_fields['language'] . "' ";
+    $query_command .= "language = '" . $get_fields['language'] . "', ";
+    $query_command .= "class_id = '" . $get_fields['class_id'] . "' ";
     $query_command .= " WHERE student_id = '" . $get_fields['student_id'] . "'";
 
     $result = mysqli_query($database_connection, $query_command);
@@ -176,6 +182,16 @@ if (isset($_POST['update_image'])) {
                                             </div>
 
                                             <div class="mb-3 col-md-6">
+                                                <label class="form-label" for="country">Class/Form</label>
+                                                <select id="country" name="class_id" class="select2 form-select">
+                                                    <option value=" ">Select Class</option>
+                                                    <?php while ($fetch_class_combo = mysqli_fetch_assoc($class_result)) { ?>
+                                                        <option value="<?php echo $fetch_class_combo['class_id']; ?>"><?php echo $fetch_class_combo['class_name'] ?></option>
+                                                    <? } ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
                                                 <label for="email" class="form-label">Date Of Birth</label>
                                                 <input class="form-control" type="date" value="<?php echo $get_fields['dateofbirth']; ?>" id="dateofbirth" name="dateofbirth" />
                                             </div>
@@ -244,6 +260,8 @@ if (isset($_POST['update_image'])) {
                                                     <option value="Ga">Ga</option>
                                                 </select>
                                             </div>
+
+
                                         </div>
                                         <div class="mt-2">
                                             <button type="submit" name="update_student" class="btn btn-primary me-2"> Save Changes </button>
@@ -286,7 +304,7 @@ if (isset($_POST['update_image'])) {
 
         if (isset($_POST["delete_student"])) {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                if (isset($_POST['account_deactivate']) && $_POST['account_deactivate'] === 'on') {                    
+                if (isset($_POST['account_deactivate']) && $_POST['account_deactivate'] === 'on') {
 
                     $query_command = "DELETE FROM student WHERE student_id = ?";
                     $statement = mysqli_prepare($database_connection, $query_command);
@@ -294,7 +312,7 @@ if (isset($_POST['update_image'])) {
                     if (mysqli_stmt_execute($statement)) {
                         header("Location: delete_message.php");
                     } else {
-                        echo "Error " . mysqli_stmt_error($statement);            
+                        echo "Error " . mysqli_stmt_error($statement);
                     }
                 } else {
                     echo '                

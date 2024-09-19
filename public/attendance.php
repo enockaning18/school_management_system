@@ -67,7 +67,7 @@ if (isset($_POST['mark_attendance'])) {
                           icon: 'success',
                           confirmButtonText: 'OK'
                       }).then(function() {
-                          
+                        window.location.href = 'class.php?class_id='+ $class_id
                       });
                   });
               </script>";
@@ -80,7 +80,7 @@ if (isset($_POST['mark_attendance'])) {
                     icon: 'error',
                     confirmButtonText: 'OK'
                 }).then(function() {
-                    
+                    window.location.href = 'class.php?class_id='+ $class_id
                 });
             });
         </script>";

@@ -1,5 +1,6 @@
 <?php
 include("../initialize.php");
+include("../shared/bootstrap-script.php");
 
 
 
@@ -44,7 +45,18 @@ if (isset($_POST['add_student'])) {
         mysqli_stmt_bind_param($statement, 'isssssssssssi', $student_id, $surname, $othername, $firstname, $dateofbirth, $email, $phonenumber, $address, $age, $nationality, $language, $file_new_name, $class_id);
         if (mysqli_stmt_execute($statement)) {
           move_uploaded_file($file_temp, $file_directory);
-          header("Location: ../../public/student.php");
+          echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Success ✅!',
+                        text: '$surname Student Added!.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(function() {
+                      window.location.href = '../../public/student.php'
+                    });
+                });
+              </script>";          
         } else {
           echo "Error " . mysqli_stmt_error($statement);
         }

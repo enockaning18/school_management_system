@@ -15,13 +15,17 @@ if (!$class_id) {
 $class_id = mysqli_real_escape_string($database_connection, $class_id);
 
 // Query to fetch teacher and class information
-$query_command = "SELECT * FROM class INNER JOIN teachers ON class.teachers_id = teachers.teachers_id WHERE class.class_id = '$class_id'";
+$query_command = "SELECT * FROM class INNER JOIN teachers ON class.teachers_id = teachers.teachers_id INNER JOIN `subject` ON class.class_id = class.class_id WHERE class.class_id = '$class_id'";
 $result = mysqli_query($database_connection, $query_command);
+
+
 
 if (!$result || mysqli_num_rows($result) === 0) {
     echo "No teachers found for the given class ID.";
     exit;
 }
+
+
 
 
 ?>
@@ -62,37 +66,48 @@ if (!$result || mysqli_num_rows($result) === 0) {
                         </div>
                     </div>
                 </div>
-            <?php } ?>
+
         </div>
 
 
         <!-- Pagination logic -->
         <?php
-        // Number of students per page
-        $students_per_page = 5;
+                // Number of students per page
+                $students_per_page = 5;
 
-        // Get the current page number from the URL, if not present default to 1
-        $current_page = $_GET['page'] ?? 1;
-        $current_page = (int)$current_page;
+                // Get the current page number from the URL, if not present default to 1
+                $current_page = $_GET['page'] ?? 1;
+                $current_page = (int)$current_page;
 
-        // Query to get the total number of students
-        $total_students_query = "SELECT COUNT(*) AS total FROM student WHERE class_id = '$class_id'";
-        $total_students_result = mysqli_query($database_connection, $total_students_query);
-        $total_students = mysqli_fetch_assoc($total_students_result)['total'];
+                // Query to get the total number of students
+                $total_students_query = "SELECT COUNT(*) AS total FROM student WHERE class_id = '$class_id'";
+                $total_students_result = mysqli_query($database_connection, $total_students_query);
+                $total_students = mysqli_fetch_assoc($total_students_result)['total'];
 
-        // Calculate the offset for the SQL query
-        $offset = ($current_page - 1) * $students_per_page;
+                // Calculate the offset for the SQL query
+                $offset = ($current_page - 1) * $students_per_page;
 
-        // Query to fetch students with limit and offset
-        $student_query = "SELECT * FROM student WHERE class_id = '$class_id' LIMIT $students_per_page OFFSET $offset";
-        $student_result = mysqli_query($database_connection, $student_query);
+                // Query to fetch students with limit and offset
+                $student_query = "SELECT * FROM student WHERE class_id = '$class_id' LIMIT $students_per_page OFFSET $offset";
+                $student_result = mysqli_query($database_connection, $student_query);
 
-        if (!$student_result || mysqli_num_rows($student_result) === 0) {
-            echo "No students found for this class.";
-        } else {
+                // Query to fetch attendance for students
+                $query_command = "SELECT student.student_id, student.surname, student.othername, student.images, ";
+                $query_command .= " COUNT(CASE WHEN attendance.status = 0 THEN 1 END) AS absent_count, ";
+                $query_command .= " COUNT(CASE WHEN attendance.status = 1 THEN 1 END) AS present_count, ";
+                $query_command .= " COUNT(status) AS total_attendance ";
+                $query_command .= " FROM student ";
+                $query_command .= " LEFT JOIN attendance ON student.student_id = attendance.student_id ";
+                $query_command .= " GROUP BY student.student_id ";
+                $attendance_result = mysqli_query($database_connection, $query_command);
+
+                if (!$student_result || mysqli_num_rows($student_result) === 0) {
+                    echo "No students found for this class.";
+                } else {
         ?>
             <div class="row">
-                <?php while ($fetched_student = mysqli_fetch_assoc($student_result)) { ?>
+                <?php while ($fetched_student = mysqli_fetch_assoc($student_result) and ($attendance_data = mysqli_fetch_assoc($attendance_result))) { ?>
+
                     <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
                         <div class="card">
                             <div class="card-body text-center">
@@ -114,16 +129,15 @@ if (!$result || mysqli_num_rows($result) === 0) {
                                 <h5 class="mb-1 card-title"><?php echo htmlspecialchars($fetched_student['student_id']); ?></h5>
                                 <span><?php echo htmlspecialchars($fetched_student['surname'] . " " . $fetched_student['othername']); ?></span>
                                 <div class="d-flex align-items-center justify-content-center my-3 gap-2">
-                                    <a href="javascript:;" class="me-1"><span class="badge bg-label-secondary">Database </span></a>
-                                    <a href="javascript:;"><span class="badge bg-label-warning">Software</span></a>
+                                    <a href="javascript:;" class="me-1"><span class="badge bg-label-secondary"><?php echo $fetched_teacher_data['subject_name'] ?></span></a>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-around my-4 py-2">
                                     <div>
-                                        <h4 class="mb-1">18</h4>
+                                        <h4 class="mb-1">0</h4>
                                         <span>Projects</span>
                                     </div>
                                     <div>
-                                        <h4 class="mb-1">834</h4>
+                                        <h4 class="mb-1"><?php echo $attendance_data['present_count'] ?>/<?php echo $attendance_data['total_attendance'] ?> </h4>
                                         <span>Attendance</span>
                                     </div>
                                     <div>
@@ -142,8 +156,8 @@ if (!$result || mysqli_num_rows($result) === 0) {
                 <?php } ?>
             </div>
             <?php
-            // Pagination controls
-            $total_pages = ceil($total_students / $students_per_page);
+                    // Pagination controls
+                    $total_pages = ceil($total_students / $students_per_page);
             ?>
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
@@ -167,6 +181,7 @@ if (!$result || mysqli_num_rows($result) === 0) {
                 </ul>
             </nav>
         <?php } ?>
+    <?php } ?>
 
     </div>
 </div>

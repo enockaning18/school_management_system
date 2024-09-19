@@ -137,26 +137,31 @@ $subject_result = mysqli_query($database_connection, $query_command);
                     </thead>
                     <tbody class="table-border-bottom-0">
                       <?php
-                      $query_command = "SELECT subject_id, subject_name, class_id, duration, teachers.last_name, teachers.first_name, images 
-                                        FROM subject 
-                                        JOIN teachers ON subject.teacher_id = teachers.teachers_id";
+                      $query_command = "SELECT subject_id, subject_name, teachers.teachers_id, class.class_name, duration, teachers.last_name, teachers.first_name, images ";
+                      $query_command .= " FROM subject JOIN teachers ON subject.teacher_id = teachers.teachers_id ";
+                      $query_command .= " JOIN class ON subject.class_id = class.class_id ";
                       $subject_result = mysqli_query($database_connection, $query_command);
                       while ($subject_fetch_result = mysqli_fetch_assoc($subject_result)) { ?>
                         <tr>
                           <td>
-                            <div class="d-flex align-items-center">
-                              <img src="../images/teachers_pictures/<?php echo $subject_fetch_result['images']; ?>" alt="Avatar" class="rounded-circle avatar avatar-xd me-3" />
-                              <span class="fw-medium"><?php echo $subject_fetch_result['last_name'] . ' ' . $subject_fetch_result['first_name'] ?></span>
+                            <div class="d-flex justify-content-start align-items-center user-name">
+                              <div class="avatar-wrapper">
+                                <div class="avatar me-2"><img src="../images/teachers_pictures/<?php echo $subject_fetch_result['images']; ?>" alt="Avatar" class="rounded-circle"></div>
+                              </div>
+                              <div class="d-flex flex-column ">
+                                <span class="emp_name text-truncate "><?php echo $subject_fetch_result['last_name'] . ' ' . $subject_fetch_result['first_name'] ?></span>
+                                <span class="emp_post text-truncate "><?php echo $subject_fetch_result['teachers_id'] ?></span>
+                              </div>
                             </div>
                           </td>
                           <td>
-                            <span class="fw-medium"><?php echo $subject_fetch_result['subject_id'] ?></span>
+                            <span class="fw-medium">Bs.<?php echo $subject_fetch_result['subject_id'] ?></span>
                           </td>
                           <td>
                             <span class="fw-medium"><?php echo $subject_fetch_result['subject_name'] ?></span>
                           </td>
                           <td>
-                            <span class="fw-medium"><?php echo $subject_fetch_result['class_id'] ?></span>
+                            <span class="fw-medium"><?php echo $subject_fetch_result['class_name'] ?></span>
                           </td>
                           <td>
                             <span class="fw-medium"><?php echo $subject_fetch_result['duration'] ?></span>

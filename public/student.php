@@ -270,7 +270,7 @@ $class_result = mysqli_query($database_connection, $query_command);
             <h5 class="card-header mb-4">Profile Details</h5>
             <!-- Hoverable Table rows -->
             <div class="card">
-              <h5 class="card-header">Teachers Table</h5>
+              <h5 class="card-header">Students Table</h5>
               <div class="table-responsive text-nowrap">
                 <table class="table table-hover">
                   <thead>

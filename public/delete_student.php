@@ -60,7 +60,7 @@ if (isset($_POST['update_image'])) {
 
     $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
     $file_own_extension = strtolower($file_extension);
-    $extension_allowed = array('jpg', 'png', 'jpeg', 'heic','svg', 'webp', 'bmp','tiff', 'ico');
+    $extension_allowed = array('jpg', 'png', 'jpeg', 'heic', 'svg', 'webp', 'bmp', 'tiff', 'ico');
 
     if (in_array($file_own_extension, $extension_allowed)) {
         if ($file_error === 0) {
@@ -105,7 +105,7 @@ if (isset($_POST['delete_student'])) {
     $statement = mysqli_prepare($database_connection, $query_command);
     mysqli_stmt_bind_param($statement, 'i', $student_id);
     if (mysqli_stmt_execute($statement)) {
-        header("Location: ../delete_message.php");
+        header("Location: delete_message.php");
     } else {
         echo "Error " . mysqli_stmt_error($statement);
     }
@@ -121,14 +121,14 @@ if (isset($_POST['delete_student'])) {
                 <i class="bx bx-bell me-2"></i>
                 <div class="me-auto fw-medium">Confirmation Message</div>
                 <small>0 mins ago</small>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button> -->
             </div>
             <div class="toast-body">
                 Do you want to delete <?php echo $get_fields['surname'] ?>
             </div>
 
             <div class="flex me-auto">
-                <button type="submit" name="delete_student" class="btn btn-primary me-2"> Delete </button>                
+                <button type="submit" name="delete_student" class="btn btn-primary me-2"> Delete </button>
             </div>
 
         </div>
@@ -197,86 +197,56 @@ if (isset($_POST['delete_student'])) {
 
                                             <div class="mb-3 col-md-6">
                                                 <label for="lastName" class="form-label">Surname </label>
-                                                <input class="form-control" value="<?php echo $get_fields['surname']; ?>" type="text" name="surname" id="lastName" placeholder="Surname " />
+                                                <input class="form-control" readonly value="<?php echo $get_fields['surname']; ?>" type="text" name="surname" id="lastName" placeholder="Surname " />
                                             </div>
 
                                             <div class="mb-3 col-md-6">
                                                 <label for="firstName" class="form-label">Other Name</label>
-                                                <input class="form-control" value="<?php echo $get_fields['othername']; ?>" type="text" id="othername" name="othername" placeholder="Other Name" autofocus />
+                                                <input class="form-control" readonly value="<?php echo $get_fields['othername']; ?>" type="text" id="othername" name="othername" placeholder="Other Name" autofocus />
                                             </div>
 
                                             <div class="mb-3 col-md-6">
                                                 <label for="firstName" class="form-label">First Name</label>
-                                                <input class="form-control" value="<?php echo $get_fields['firstname']; ?>" type="text" id="firsName" name="firstname" placeholder="First Name" autofocus />
+                                                <input class="form-control" readonly value="<?php echo $get_fields['firstname']; ?>" type="text" id="firsName" name="firstname" placeholder="First Name" autofocus />
                                             </div>
 
                                             <div class="mb-3 col-md-6">
                                                 <label for="email" class="form-label">Date Of Birth</label>
-                                                <input class="form-control" type="date" value="<?php echo $get_fields['dateofbirth']; ?>" id="dateofbirth" name="dateofbirth" />
+                                                <input class="form-control" readonly type="date" value="<?php echo $get_fields['dateofbirth']; ?>" id="dateofbirth" name="dateofbirth" />
                                             </div>
 
                                             <div class="mb-3 col-md-6">
                                                 <label for="email" class="form-label">E-mail</label>
-                                                <input class="form-control" type="text" value="<?php echo $get_fields['email']; ?>" id="email" name="email" placeholder="john.doe@example.com" />
+                                                <input class="form-control" readonly type="text" value="<?php echo $get_fields['email']; ?>" id="email" name="email" placeholder="john.doe@example.com" />
                                             </div>
 
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="phoneNumber">Phone Number</label>
                                                 <div class="input-group input-group-merge">
                                                     <span class="input-group-text">GH (+233)</span>
-                                                    <input type="text" id="phoneNumber" value="<?php echo $get_fields['phonenumber']; ?>" name="phonenumber" class="form-control" placeholder="202 555 0111" />
+                                                    <input type="text" readonly id="phoneNumber" value="<?php echo $get_fields['phonenumber']; ?>" name="phonenumber" class="form-control" placeholder="202 555 0111" />
                                                 </div>
                                             </div>
                                             <div class="mb-3 col-md-6">
-                                                <labrgel for="address" class="form-label">Address</label>
-                                                    <input type="text" class="form-control" id="address" value="<?php echo $get_fields['address']; ?>" name="address" placeholder="Address" />
+                                                <label for="address" class="form-label">Address</label>
+                                                <input type="text" readonly class="form-control" id="address" value="<?php echo $get_fields['address']; ?>" name="address" placeholder="Address" />
                                             </div>
 
                                             <div class="mb-3 col-md-6">
                                                 <label for="address" class="form-label">Age</label>
-                                                <input type="text" class="form-control" id="age" name="age" value="<?php echo $get_fields['age']; ?>" placeholder="Age" />
+                                                <input type="text" readonly class="form-control" id="age" name="age" value="<?php echo $get_fields['age']; ?>" placeholder="Age" />
                                             </div>
 
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="country">Country</label>
-                                                <select id="country" name="nationality" class="select2 form-select">
+                                                <select id="country" readonly name="nationality" class="select2 form-select">
                                                     <option value="" <?php echo $get_fields['nationality']; ?>> <?php echo $get_fields['nationality']; ?></option>
-                                                    <option value="Australia">Australia</option>
-                                                    <option value="Bangladesh">Bangladesh</option>
-                                                    <option value="Belarus">Belarus</option>
-                                                    <option value="Brazil">Brazil</option>
-                                                    <option value="Canada">Canada</option>
-                                                    <option value="China">China</option>
-                                                    <option value="France">France</option>
-                                                    <option value="Germany">Ghana</option>
-                                                    <option value="Germany">Germany</option>
-                                                    <option value="India">India</option>
-                                                    <option value="Indonesia">Indonesia</option>
-                                                    <option value="Israel">Israel</option>
-                                                    <option value="Italy">Italy</option>
-                                                    <option value="Japan">Japan</option>
-                                                    <option value="Korea">Korea, Republic of</option>
-                                                    <option value="Mexico">Mexico</option>
-                                                    <option value="Philippines">Philippines</option>
-                                                    <option value="Russia">Russian Federation</option>
-                                                    <option value="South Africa">South Africa</option>
-                                                    <option value="Thailand">Thailand</option>
-                                                    <option value="Turkey">Turkey</option>
-                                                    <option value="Ukraine">Ukraine</option>
-                                                    <option value="United Arab Emirates">United Arab Emirates</option>
-                                                    <option value="United Kingdom">United Kingdom</option>
-                                                    <option value="United States">United States</option>
                                                 </select>
                                             </div>
-                                            <div class="mb-3 col-md-6">
+                                            <div class="mb-3 col-md-6" readonly>
                                                 <label for="language" class="form-label">Language</label>
                                                 <select id="language" name="language" class="select2 form-select">
                                                     <option value="" <?php echo $get_fields['language']; ?>> <?php echo $get_fields['language']; ?></option>
-                                                    <option value="English">English</option>
-                                                    <option value="Twi">Twi</option>
-                                                    <option value="Fante">Fante</option>
-                                                    <option value="Sefwi">Sefwi</option>
-                                                    <option value="Ga">Ga</option>
                                                 </select>
                                             </div>
                                         </div>

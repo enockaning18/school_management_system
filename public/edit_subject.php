@@ -43,7 +43,6 @@ if (isset($_POST['update_subject'])) {
 
 
 
-?>
 <!-- Content wrapper -->
 <div class="content-wrapper">
     <!-- Content -->
@@ -69,7 +68,7 @@ if (isset($_POST['update_subject'])) {
                             <!-- Account -->
                             <form action="" id="formAccountSettings" method="POST" enctype="multipart/form-data">
                                 <?php
-                                $query_command = "SELECT subject_id, subject_name, class_id, duration, teachers.last_name, teachers.images FROM subject JOIN teachers ON subject.teacher_id = teachers.teachers_id WHERE subject_id = '" . $subject_id . "' ";
+                                $query_command = "SELECT subject_id, subject_name, duration, teachers.last_name, teachers.images FROM subject JOIN teachers ON subject.teacher_id = teachers.teachers_id WHERE subject_id = '" . $subject_id . "' ";
                                 $teacher_subject_result = mysqli_query($database_connection, $query_command);
                                 ?>
                                 <?php while ($get_fields = mysqli_fetch_assoc($teacher_subject_result)) { ?>
@@ -90,7 +89,7 @@ if (isset($_POST['update_subject'])) {
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="country">Teacher</label>
                                                 <select id="teacher" name="teacher_id" class="select2 form-select">
-                                                    <option value="<?php echo $fetched_subject_teacher['teachers_id'] ?>"><?php echo $fetched_subject_teacher['first_name'] . ' ' . $fetched_subject_teacher['last_name'] ?></option>
+                                                    <option value=""> Select </option>
                                                     <?php while ($fetched_subject_teacher = mysqli_fetch_assoc($teacher_subject_result)) { ?>
                                                         <option value="<?php echo $fetched_subject_teacher['teachers_id'] ?>"> <?php echo $fetched_subject_teacher['first_name'] . ' ' . $fetched_subject_teacher['last_name'] ?></option>
                                                     <?php } ?>
@@ -151,7 +150,7 @@ if (isset($_POST['update_subject'])) {
                                     <input class="form-check-input" type="checkbox" name="account_deactivate" id="account_deactivate" />
                                     <label class="form-check-label" for="account_deactivate">I confirm my delete subject</label>
                                 </div>
-                                <button type="submit" class="btn btn-danger deactivate-account">Delete Subject</button>
+                                <button type="submit" name="delete_account" class="btn btn-danger deactivate-account">Delete Subject</button>
                             </form>
                         </div>
                     </div>
@@ -164,33 +163,46 @@ if (isset($_POST['update_subject'])) {
 
         <?php
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (isset($_POST['account_deactivate']) && $_POST['account_deactivate'] === 'on') {
-                $student_id;
+        if (isset($_POST['delete_account'])) {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                if (isset($_POST['account_deactivate']) && $_POST['account_deactivate'] === 'on') {
+                    echo $subject_id;
 
-                $query_command = "DELETE FROM student WHERE student_id = ?";
-                $statement = mysqli_prepare($database_connection, $query_command);
-                mysqli_stmt_bind_param($statement, 'i', $student_id);
-                if (mysqli_stmt_execute($statement)) {
-                    header("Location: teacher.php");
+                    $query_command = "DELETE FROM `subject` WHERE subject_id = ?";
+                    $statement = mysqli_prepare($database_connection, $query_command);
+                    mysqli_stmt_bind_param($statement, 'i',  $subject_id);
+                    if (mysqli_stmt_execute($statement)) {
+                        header("Location: delete_message.php");
+                    } else {
+                        // echo "Error " . mysqli_stmt_error($statement);
+                        echo '<div class="position-absolute top-50 start-50 translate-right bs-toast toast fade show bg-danger  top-0 end-0" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-header">
+                                <i class="bx bx-bell me-2"></i>
+                                <div class="me-auto fw-medium">Notification</div>
+                                <small>0 mins ago</small>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
+                                <div class="toast-body">
+                                This Teacher has been assign to a class, Reassign a new teacher before he can be deleted
+                                </div>
+                            </div>';
+                    }
                 } else {
-                    echo "Error " . mysqli_stmt_error($statement);
+                    echo '<div class="position-absolute top-50 start-50 translate-right bs-toast toast fade show bg-danger  top-0 end-0" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header">
+                            <i class="bx bx-bell me-2"></i>
+                            <div class="me-auto fw-medium">Notification</div>
+                            <small>0 mins ago</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body">
+                            Select Confirm before account can be deactivated.
+                            </div>
+                        </div>';
                 }
-            } else {
-                echo '                
-                <div class="position-absolute top-50 start-50 translate-right bs-toast toast fade show bg-danger  top-0 end-0" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                    <i class="bx bx-bell me-2"></i>
-                    <div class="me-auto fw-medium">Notification</div>
-                    <small>0 mins ago</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body">
-                    Select Confirm before account can be deactivated.
-                    </div>
-                </div>';
             }
         }
+
 
 
 
