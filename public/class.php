@@ -15,7 +15,7 @@ if (!$class_id) {
 $class_id = mysqli_real_escape_string($database_connection, $class_id);
 
 // Query to fetch teacher and class information
-$query_command = "SELECT * FROM class INNER JOIN teachers ON class.teachers_id = teachers.teachers_id INNER JOIN `subject` ON class.class_id = class.class_id WHERE class.class_id = '$class_id'";
+$query_command = "SELECT * FROM subject JOIN teachers ON subject.teacher_id = teachers.teachers_id JOIN class ON subject.class_id = class.class_id WHERE subject.class_id = '$class_id'";
 $result = mysqli_query($database_connection, $query_command);
 
 

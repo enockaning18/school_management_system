@@ -1,43 +1,45 @@
 <script src="../bootstrap-config/sweetalert2/jquery-3.7.1.min.js"></script>
 <script src="../bootstrap-config/sweetalert2/sweetalert2.all.min.js"></script>
 
-<script type="text/javascript">
+<script src="" type="text/javascript">
   function payWithPaystack() {
-    var handler = PaystackPop.setup({
-        key: 'pk_live_1331391d9362adc096ed00e574cd590fcc024896',
-        email: document.getElementById('email_address').value,
-        student_id: document.getElementById('student_id').value,
-        purpose: document.getElementById('payment').value,
-        amount: document.getElementById('amount_payed').value * 100,
-        currency: "GHS",
-        ref: 'PSK_' + Math.floor((Math.random() * 1000000000) + 1), // Generate a random reference
-        callback: function(response) {
-            let reference = response.reference;
-            let student_id = document.getElementById('student_id').value;
 
-            // Save the reference and student_id to the server
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '../private/save_transaction.php', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    alert('Payment was complete: ' + reference);
-                    window.location.href = "http://localhost/1111/public/view_transactions.php?reference=" + reference;
-                }
-            };
-            xhr.send('reference=' + encodeURIComponent(reference) + '&student_id=' + encodeURIComponent(student_id));
-        },
-        onClose: function() {
-            Swal.fire({
-                title: 'Error!',
-                text: 'Transaction Cancelled',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        }
+    var handler = PaystackPop.setup({
+      key: 'pk_test_b931fa8c6c4b75e1d0a6ad8d6a564febf69876f5',
+      email: document.getElementById('email_address').value,
+      student_id: document.getElementById('student_id').value,
+      amount: document.getElementById('amount_payed').value * 100,
+      currency: "GHS",
+      ref: 'PSK_' + Math.floor((Math.random() * 1000000000) + 1), // Generate a random reference
+      callback: function(response) {
+        document.getElementById('paymentForm').submit();
+        let reference = response.reference;
+        let student_id = document.getElementById('student_id').value;
+
+        // Save the reference and student_id to the server
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '../private/save_transaction.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            alert('Payment was complete: ' + reference);
+            window.location.href = "http://localhost/1111/public/view_transactions.php?reference=" + reference;
+          }
+        };
+        xhr.send('reference=' + encodeURIComponent(reference) + '&student_id=' + encodeURIComponent(student_id));
+      },
+      onClose: function() {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Transaction Cancelled',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
     });
     handler.openIframe();
-}
+  }
+
   function verifyTransaction(reference) {
     // Prepare data to send to the server
     var data = {

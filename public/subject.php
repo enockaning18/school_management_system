@@ -137,7 +137,7 @@ $subject_result = mysqli_query($database_connection, $query_command);
                     </thead>
                     <tbody class="table-border-bottom-0">
                       <?php
-                      $query_command = "SELECT subject_id, subject_name, teachers.teachers_id, class.class_name, duration, teachers.last_name, teachers.first_name, images ";
+                      $query_command = "SELECT subject.subject_id, subject_name, teachers.teachers_id, class.class_name, duration, teachers.last_name, teachers.first_name, images ";
                       $query_command .= " FROM subject JOIN teachers ON subject.teacher_id = teachers.teachers_id ";
                       $query_command .= " JOIN class ON subject.class_id = class.class_id ";
                       $subject_result = mysqli_query($database_connection, $query_command);

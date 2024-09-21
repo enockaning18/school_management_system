@@ -135,7 +135,7 @@ if (isset($_POST['add_class'])) {
                       icon: 'success',
                       confirmButtonText: 'OK'
                   }).then(function() {
-                      
+                    window.location.href = 'teachers.php'  
                   });
               });
             </script>";
@@ -192,13 +192,33 @@ if (isset($_POST['assign_teacher'])) {
   $teacher_id = $_POST['teacher'];
   $class = $_POST['class'];
 
-  $query_command = "UPDATE Class SET ";
-  $query_command .= "teachers_id = '" . $teacher_id . "' ";
-  $query_command .= "WHERE class_id = '" . $class . "'";
-  $result = mysqli_query($database_connection, $query_command);
-
-  if ($result) {
+  $query_command = "SELECT * FROM class WHERE teachers_id = ? OR class_id = ? ";
+  $statement = mysqli_prepare($database_connection, $query_command);
+  mysqli_stmt_bind_param($statement, 'ii', $teacher_id, $class);
+  mysqli_stmt_execute($statement);
+  $result = mysqli_stmt_get_result($statement);
+  if (mysqli_num_rows($result) > 0) {
     echo "<script>
+              document.addEventListener('DOMContentLoaded', function() {
+                  Swal.fire({
+                      title: 'Error!',
+                      text: 'Class and Teacher already Assigned.',
+                      icon: 'error',
+                      confirmButtonText: 'Retry'
+                  }).then(function() {
+                    window.location.href = 'teachers.php'  
+                  });
+              });
+            </script>";
+  } else {
+
+    $query_command = "UPDATE Class SET ";
+    $query_command .= "teachers_id = '" . $teacher_id . "' ";
+    $query_command .= "WHERE class_id = '" . $class . "'";
+    $result = mysqli_query($database_connection, $query_command);
+
+    if ($result) {
+      echo "<script>
               document.addEventListener('DOMContentLoaded', function() {
                   Swal.fire({
                       title: 'Success!',
@@ -210,9 +230,10 @@ if (isset($_POST['assign_teacher'])) {
                   });
               });
             </script>";
-  } else {
-    echo $query_command;
-    echo mysqli_error($database_connection);
+    } else {
+      echo $query_command;
+      echo mysqli_error($database_connection);
+    }
   }
 }
 
@@ -223,7 +244,9 @@ $teacher_result = mysqli_query($database_connection, $query_command);
 $query_command = "SELECT * FROM class";
 $class_result = mysqli_query($database_connection, $query_command);
 
-$query_command = "SELECT * FROM teachers JOIN class ON class.teachers_id = teachers.teachers_id";
+$query_command = " SELECT * FROM subject ";
+$query_command .= " JOIN class ON subject.class_id = class.class_id ";
+$query_command .= " JOIN teachers ON subject.teacher_id = teachers.teachers_id ";
 $table_result = mysqli_query($database_connection, $query_command);
 
 
@@ -427,7 +450,7 @@ $table_result = mysqli_query($database_connection, $query_command);
                                   <div class="mb-3 ">
                                     <label for="lastName" class="form-label">No. Students</label>
                                     <input class="form-control" type="number" name="no_students" id="classname" placeholder=" " />
-                                  </div>                        
+                                  </div>
 
                                   <div class="mt-2">
                                     <button type="submit" name="add_class" class="btn btn-primary me-2"> Add Class </button>
@@ -545,9 +568,9 @@ $table_result = mysqli_query($database_connection, $query_command);
 
                           <td>
                             <div class="flex-row align-items-center ms-auto ">
-                              <span class="fw-medium badge bg-label-primary me-1">
-                                <?php if (!empty($fetch_result['subject'])) {
-                                  echo $fetch_result['subject'];
+                              <span class="">
+                                <?php if (!empty($fetch_result['subject_name'])) {
+                                  echo $fetch_result['subject_name'];
                                 } else {
                                   echo "Null";
                                 } ?>

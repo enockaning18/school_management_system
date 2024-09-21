@@ -5,6 +5,20 @@ include(SHARED_PATH . "/navbar.php");
 include "../private/scripts.php";
 if (!empty($_SESSION["admin_id"])) {
 
+    // handle incoming payments into database
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_fees'])) {
+        $payment_id = str_pad(rand(0, 9999999), 7, '0', STR_PAD_LEFT);
+        $student_id = $_POST['student_id'];
+        $class_id = $_POST['class_id'];
+        $purpose = $_POST['purpose'];
+        $amount_payed = $_POST['amount_payed'];
+
+        $query_command = 'INSERT INTO payments(payment_id, class_id, student_id, purpose, amount_payed) VALUES(?,?,?,?,?)';
+        $prepare_statement = mysqli_prepare($database_connection, $query_command);
+        mysqli_stmt_bind_param($prepare_statement, 'iiiss', $payment_id, $class_id, $student_id, $purpose, $amount_payed);
+        mysqli_stmt_execute($prepare_statement);
+    }
+
     // Handle assignment of fees if the form is submitted
     if (isset($_POST['assign_amount'])) {
         // Sanitize input
@@ -102,7 +116,7 @@ if (!empty($_SESSION["admin_id"])) {
                                                 <div class="mb-3 col-md-6">
                                                     <input type="hidden">
                                                     <label class="form-label" for="country">Payment For</label>
-                                                    <select id="payment" name="payment" class="select2 form-select">
+                                                    <select id="purpose" name="purpose" class="select2 form-select">
                                                         <option value="">Select</option>
                                                         <option value="School Fees">School Fees</option>
                                                     </select>
@@ -153,7 +167,7 @@ if (!empty($_SESSION["admin_id"])) {
                                                     });
                                                 }
                                             };
-                                            xhr.send('class_id=' + encodeURIComponent(class_id));                                            
+                                            xhr.send('class_id=' + encodeURIComponent(class_id));
                                         }
                                     });
                                 });

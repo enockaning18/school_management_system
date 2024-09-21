@@ -68,7 +68,7 @@ if (isset($_POST['update_subject'])) {
                             <!-- Account -->
                             <form action="" id="formAccountSettings" method="POST" enctype="multipart/form-data">
                                 <?php
-                                $query_command = "SELECT subject_id, subject_name, duration, teachers.last_name, teachers.images FROM subject JOIN teachers ON subject.teacher_id = teachers.teachers_id WHERE subject_id = '" . $subject_id . "' ";
+                                $query_command = "SELECT subject.subject_id, subject_name, duration, teachers.last_name, teachers.images FROM subject JOIN teachers ON subject.teacher_id = teachers.teachers_id WHERE subject.subject_id = '" . $subject_id . "' ";
                                 $teacher_subject_result = mysqli_query($database_connection, $query_command);
                                 ?>
                                 <?php while ($get_fields = mysqli_fetch_assoc($teacher_subject_result)) { ?>
