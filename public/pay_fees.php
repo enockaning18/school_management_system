@@ -6,7 +6,7 @@ include "../private/scripts.php";
 if (!empty($_SESSION["admin_id"])) {
 
     // handle incoming payments into database
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_fees'])) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $payment_id = str_pad(rand(0, 9999999), 7, '0', STR_PAD_LEFT);
         $student_id = $_POST['student_id'];
         $class_id = $_POST['class_id'];
@@ -138,7 +138,7 @@ if (!empty($_SESSION["admin_id"])) {
                                             </div>
                                         </div>
                                         <div class="mt-2">
-                                            <button type="button" onclick="payWithPaystack()" name="pay_fees" class="btn btn-primary me-2"> Make Payment </button>
+                                            <button type="button" onclick="payWithPaystack()" class="btn btn-primary me-2"> Make Payment </button>
                                         </div>
                                     </div>
                                 </form>

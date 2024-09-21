@@ -1,20 +1,23 @@
 <script src="../bootstrap-config/sweetalert2/jquery-3.7.1.min.js"></script>
 <script src="../bootstrap-config/sweetalert2/sweetalert2.all.min.js"></script>
 
-<script src="" type="text/javascript">
+<script type="text/javascript">
   function payWithPaystack() {
-
     var handler = PaystackPop.setup({
+
       key: 'pk_test_b931fa8c6c4b75e1d0a6ad8d6a564febf69876f5',
       email: document.getElementById('email_address').value,
       student_id: document.getElementById('student_id').value,
       amount: document.getElementById('amount_payed').value * 100,
       currency: "GHS",
       ref: 'PSK_' + Math.floor((Math.random() * 1000000000) + 1), // Generate a random reference
+
       callback: function(response) {
-        document.getElementById('paymentForm').submit();
         let reference = response.reference;
         let student_id = document.getElementById('student_id').value;
+
+        var form = document.getElementById('paymentForm');
+        form.submit();
 
         // Save the reference and student_id to the server
         var xhr = new XMLHttpRequest();
