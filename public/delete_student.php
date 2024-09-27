@@ -1,80 +1,76 @@
 <?php
 include("../private/initialize.php");
 include(SHARED_PATH . "/navbar.php");
-require_login();
-$student_id = $_GET['student_id'] ?? 'User not found'; // PHP > 7.0
-?>
-<?php
 
+if (!empty($_SESSION["admin_id"])) {
+    $student_id = $_GET['student_id'] ?? 'User not found'; // PHP > 7.0
+    $query_command = "SELECT * FROM student WHERE student_id = '" . $student_id . "'";
+    $student_result = mysqli_query($database_connection, $query_command);
 
+    ////////////update student code starts here ////////////////
+    if (isset($_POST['update_student'])) {
+        $get_fields['student_id'] = $student_id;
+        $get_fields['age'] = $_POST['age'];
+        $get_fields['email'] = $_POST['email'];
+        $get_fields['surname'] = $_POST['surname'];
+        $get_fields['othername'] = $_POST['othername'];
+        $get_fields['firstname'] = $_POST['firstname'];
+        $get_fields['dateofbirth'] = $_POST['dateofbirth'];
+        $get_fields['phonenumber'] = $_POST['phonenumber'];
+        $get_fields['address'] = $_POST['address'];
+        $get_fields['nationality'] = $_POST['nationality'];
+        $get_fields['language'] = $_POST['language'];
 
-$query_command = "SELECT * FROM student WHERE student_id = '" . $student_id . "'";
-$student_result = mysqli_query($database_connection, $query_command);
+        $query_command = "UPDATE student SET ";
+        $query_command .= "surname = '" . $get_fields['surname'] . "',";
+        $query_command .= "othername = '" . $get_fields['othername'] . "',";
+        $query_command .= "firstname = '" . $get_fields['firstname'] . "',";
+        $query_command .= "dateofbirth = '" . $get_fields['dateofbirth'] . "',";
+        $query_command .= "phonenumber = '" . $get_fields['phonenumber'] . "',";
+        $query_command .= "address = '" . $get_fields['address'] . "',";
+        $query_command .= "language = '" . $get_fields['language'] . "' ";
+        $query_command .= " WHERE student_id = '" . $get_fields['student_id'] . "'";
 
-////////////update student code starts here ////////////////
-if (isset($_POST['update_student'])) {
-    $get_fields['student_id'] = $student_id;
-    $get_fields['age'] = $_POST['age'];
-    $get_fields['email'] = $_POST['email'];
-    $get_fields['surname'] = $_POST['surname'];
-    $get_fields['othername'] = $_POST['othername'];
-    $get_fields['firstname'] = $_POST['firstname'];
-    $get_fields['dateofbirth'] = $_POST['dateofbirth'];
-    $get_fields['phonenumber'] = $_POST['phonenumber'];
-    $get_fields['address'] = $_POST['address'];
-    $get_fields['nationality'] = $_POST['nationality'];
-    $get_fields['language'] = $_POST['language'];
-
-    $query_command = "UPDATE student SET ";
-    $query_command .= "surname = '" . $get_fields['surname'] . "',";
-    $query_command .= "othername = '" . $get_fields['othername'] . "',";
-    $query_command .= "firstname = '" . $get_fields['firstname'] . "',";
-    $query_command .= "dateofbirth = '" . $get_fields['dateofbirth'] . "',";
-    $query_command .= "phonenumber = '" . $get_fields['phonenumber'] . "',";
-    $query_command .= "address = '" . $get_fields['address'] . "',";
-    $query_command .= "language = '" . $get_fields['language'] . "' ";
-    $query_command .= " WHERE student_id = '" . $get_fields['student_id'] . "'";
-
-    $result = mysqli_query($database_connection, $query_command);
-    if ($result) {
-        echo 'updated';
-    } else {
-        mysqli_error($database_connection);
+        $result = mysqli_query($database_connection, $query_command);
+        if ($result) {
+            echo 'updated';
+        } else {
+            mysqli_error($database_connection);
+        }
     }
-}
 
 
-////////////update student code ends here ////////////////
+    ////////////update student code ends here ////////////////
 
 
 
 
-////////////update image code starts here ////////////////
+    ////////////update image code starts here ////////////////
 
-if (isset($_POST['update_image'])) {
-    $file = $_FILES['image'];
-    $file_name = $_FILES['image']['name'];
-    $file_size = $_FILES['image']['size'];
-    $file_temp = $_FILES['image']['tmp_name'];
-    $file_error = $_FILES['image']['error'];
+    if (isset($_POST['update_image'])) {
+        $file = $_FILES['image'];
+        $file_name = $_FILES['image']['name'];
+        $file_size = $_FILES['image']['size'];
+        $file_temp = $_FILES['image']['tmp_name'];
+        $file_error = $_FILES['image']['error'];
 
-    $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
-    $file_own_extension = strtolower($file_extension);
-    $extension_allowed = array('jpg', 'png', 'jpeg', 'heic', 'svg', 'webp', 'bmp', 'tiff', 'ico');
+        $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
+        $file_own_extension = strtolower($file_extension);
+        $extension_allowed = array('jpg', 'png', 'jpeg', 'heic', 'svg', 'webp', 'bmp', 'tiff', 'ico');
 
-    if (in_array($file_own_extension, $extension_allowed)) {
-        if ($file_error === 0) {
-            if ($file_size < 1000000000000) {
-                $file_new_name = uniqid('') . "." . $file_extension;
-                $file_directory = '../images/student_pictures/' . $file_new_name;
+        if (in_array($file_own_extension, $extension_allowed)) {
+            if ($file_error === 0) {
+                if ($file_size < 1000000000000) {
+                    $file_new_name = uniqid('') . "." . $file_extension;
+                    $file_directory = '../images/student_pictures/' . $file_new_name;
 
-                $query_command = "UPDATE student SET images = ? WHERE student_id = ?";
-                $statement = mysqli_prepare($database_connection, $query_command);
-                mysqli_stmt_bind_param($statement, 'si', $file_new_name, $student_id);
+                    $query_command = "UPDATE student SET images = ? WHERE student_id = ?";
+                    $statement = mysqli_prepare($database_connection, $query_command);
+                    mysqli_stmt_bind_param($statement, 'si', $file_new_name, $student_id);
 
-                if (mysqli_stmt_execute($statement))
-                    move_uploaded_file($file_temp, $file_directory);
-                echo '                
+                    if (mysqli_stmt_execute($statement))
+                        move_uploaded_file($file_temp, $file_directory);
+                    echo '                
                     <div class="position-absolute top-50 start-50 translate-middle bs-toast toast fade show bg-success  top-0 end-0" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-header">
                     <i class="bx bx-bell me-2"></i>
@@ -86,33 +82,39 @@ if (isset($_POST['update_image'])) {
                     Image Updated Successfully.
                     </div>
                     </div>';
+                } else {
+                    echo "File size too big";
+                }
             } else {
-                echo "File size too big";
+                echo "There was an error uploading file";
             }
         } else {
-            echo "There was an error uploading file";
+            echo "File extension not accepted";
         }
     } else {
-        echo "File extension not accepted";
     }
-} else {
-}
 
-if (isset($_POST['delete_student'])) {
-    $student_id;
+    if (isset($_POST['delete_student'])) {
+        $student_id;
 
-    $query_command = "DELETE FROM student WHERE student_id = ?";
-    $statement = mysqli_prepare($database_connection, $query_command);
-    mysqli_stmt_bind_param($statement, 'i', $student_id);
-    if (mysqli_stmt_execute($statement)) {
-        header("Location: delete_message.php");
-    } else {
-        echo "Error " . mysqli_stmt_error($statement);
+        $query_command = "DELETE FROM student WHERE student_id = ?";
+        $statement = mysqli_prepare($database_connection, $query_command);
+        mysqli_stmt_bind_param($statement, 'i', $student_id);
+        if (mysqli_stmt_execute($statement)) {
+            header("Location: delete_message.php");
+        } else {
+            echo "Error " . mysqli_stmt_error($statement);
+        }
     }
-}
-
-
 ?>
+<?php } else {
+    header("Location: auth_login.php");
+    exit; // It's a good practice to call exit after a header redirect
+}
+ob_end_flush(); // Flush the output buffer
+?>
+
+
 <?php while ($get_fields = mysqli_fetch_assoc($student_result)) { ?>
     <!-- Content wrapper -->
     <form action="" id="formAccountSettings" method="POST" enctype="multipart/form-data">
@@ -255,7 +257,6 @@ if (isset($_POST['delete_student'])) {
                                         </div>
 
 
-                                    <?php } ?>
                                 </form>
 
                             </div>
@@ -268,9 +269,10 @@ if (isset($_POST['delete_student'])) {
 
             </div>
             <!-- Content wrapper -->
+        </div>
+    </div>
 
-            <?php
+<?php } ?>
 
 
-
-            include(SHARED_PATH . "/footer.php");
+<?php include(SHARED_PATH . "/footer.php"); ?>

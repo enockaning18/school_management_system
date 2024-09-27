@@ -27,7 +27,8 @@
    <meta name="description" content="" />
 
    <!-- Favicon -->
-
+   <link href="https://fonts.cdnfonts.com/css/unicorns-are-awesome" rel="stylesheet">
+                
    <!-- <link rel="icon" type="image/x-icon" href="../bootstrap-config/assets/img/favicon/favicon.ico" /> -->
    <link rel="icon" type="" href="schoollogo.png" />
 

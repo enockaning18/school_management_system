@@ -4,18 +4,17 @@ use LDAP\Result;
 
 include("../private/initialize.php");
 include(SHARED_PATH . "/navbar.php");
-$query_command = "SELECT * FROM student";
-$result = mysqli_query($database_connection, $query_command);
 
-$query_command = 'SELECT surname, othername FROM student';
-$student_result = mysqli_query($database_connection, $query_command);
-
-$query_command = "SELECT * FROM class";
-$class_result = mysqli_query($database_connection, $query_command);
-
-?>
-
-
+if (!empty($_SESSION["admin_id"])) {
+  $query_command = "SELECT * FROM student";
+  $result = mysqli_query($database_connection, $query_command);
+  
+  $query_command = 'SELECT surname, othername FROM student';
+  $student_result = mysqli_query($database_connection, $query_command);
+  
+  $query_command = "SELECT * FROM class";
+  $class_result = mysqli_query($database_connection, $query_command);
+  ?>
 <!-- Content wrapper -->
 
 <div class="content-wrapper">
@@ -374,6 +373,16 @@ $class_result = mysqli_query($database_connection, $query_command);
     document.body.innerHTML = originalContents;
   }
 </script>
-<?php
+  <?php } else {
+      header("Location: auth_login.php");
+      exit; // It's a good practice to call exit after a header redirect
+  }
+  ob_end_flush(); // Flush the output buffer
+  ?>
 
-include(SHARED_PATH . "/footer.php");
+
+?>
+
+
+
+<?php include(SHARED_PATH . "/footer.php");?>

@@ -5,7 +5,7 @@ $student_id = $_GET['student_id'] ?? 'User not found'; // PHP > 7.0
 ?>
 <?php
 
-$query_command = "SELECT * FROM student WHERE student_id = '" . $student_id . "'";
+$query_command = "SELECT * FROM student JOIN class ON student.class_id = class.class_id WHERE student_id = '" . $student_id . "'";
 $student_result = mysqli_query($database_connection, $query_command);
 
 $query_command = "SELECT * FROM class";
@@ -184,7 +184,7 @@ if (isset($_POST['update_image'])) {
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="country">Class/Form</label>
                                                 <select id="country" name="class_id" class="select2 form-select">
-                                                    <option value=" ">Select Class</option>
+                                                    <option value="<?php echo $get_fields['class_id']; ?> "><?php echo $get_fields['class_name']; ?></option>
                                                     <?php while ($fetch_class_combo = mysqli_fetch_assoc($class_result)) { ?>
                                                         <option value="<?php echo $fetch_class_combo['class_id']; ?>"><?php echo $fetch_class_combo['class_name'] ?></option>
                                                     <? } ?>
